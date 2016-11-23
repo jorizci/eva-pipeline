@@ -32,17 +32,16 @@ import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionException;
-import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import uk.ac.ebi.eva.pipeline.configuration.GenotypedVcfConfiguration;
 import uk.ac.ebi.eva.pipeline.configuration.JobOptions;
 import uk.ac.ebi.eva.pipeline.configuration.JobParametersNames;
-import uk.ac.ebi.eva.pipeline.jobs.GenotypedVcfJob;
+import uk.ac.ebi.eva.pipeline.configuration.StepLauncherConfiguration;
 import uk.ac.ebi.eva.test.utils.JobTestUtils;
+import uk.ac.ebi.eva.test.utils.StepLauncherTestUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -58,11 +57,14 @@ import static uk.ac.ebi.eva.test.utils.JobTestUtils.getLines;
  */
 @RunWith(SpringRunner.class)
 @ActiveProfiles("variant-annotation-mongo")
-@ContextConfiguration(classes = {GenotypedVcfJob.class, JobOptions.class, GenotypedVcfConfiguration.class, JobLauncherTestUtils.class})
+@ContextConfiguration(classes = {VariantLoaderStep.class, JobOptions.class, GenotypedVcfConfiguration.class,
+        StepLauncherConfiguration.class})
 public class VariantLoaderStepTest {
 
+    private static
+
     @Autowired
-    private JobLauncherTestUtils jobLauncherTestUtils;
+    private StepLauncherTestUtils stepLauncherTestUtils;
 
     @Autowired
     private JobOptions jobOptions;
@@ -98,7 +100,7 @@ public class VariantLoaderStepTest {
         FileUtils.copyFile(transformedVariantsFile, tmpTransformedVariantsFile);
 
         // When the execute method in variantsLoad is executed
-        JobExecution jobExecution = jobLauncherTestUtils.launchStep(GenotypedVcfJob.LOAD_VARIANTS);
+        JobExecution jobExecution = stepLauncherTestUtils.launchStep();
 
         //Then variantsLoad step should complete correctly
         assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
@@ -135,7 +137,7 @@ public class VariantLoaderStepTest {
                 source.getType(),
                 source.getAggregation()));
 
-        JobExecution jobExecution = jobLauncherTestUtils.launchStep(GenotypedVcfJob.LOAD_VARIANTS);
+        JobExecution jobExecution = stepLauncherTestUtils.launchStep();
 
         assertEquals(inputFile, jobOptions.getPipelineOptions().getString(JobParametersNames.INPUT_VCF));
         assertEquals(ExitStatus.FAILED.getExitCode(), jobExecution.getExitStatus().getExitCode());

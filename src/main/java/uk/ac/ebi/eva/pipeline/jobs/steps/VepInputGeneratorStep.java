@@ -33,6 +33,7 @@ import uk.ac.ebi.eva.pipeline.configuration.writers.VepInputFlatFileWriterConfig
 import uk.ac.ebi.eva.pipeline.io.readers.NonAnnotatedVariantsMongoReader;
 import uk.ac.ebi.eva.pipeline.io.writers.VepInputFlatFileWriter;
 import uk.ac.ebi.eva.pipeline.jobs.steps.processors.AnnotationProcessor;
+import uk.ac.ebi.eva.pipeline.model.IVariant;
 import uk.ac.ebi.eva.pipeline.model.VariantWrapper;
 import uk.ac.ebi.eva.pipeline.parameters.JobOptions;
 import uk.ac.ebi.eva.pipeline.parameters.JobParametersNames;
@@ -69,7 +70,7 @@ public class VepInputGeneratorStep {
 
     @Autowired
     @Qualifier(VEP_INPUT_WRITER)
-    private ItemStreamWriter<VariantWrapper> writer;
+    private ItemStreamWriter<IVariant> writer;
 
     @Bean(GENERATE_VEP_INPUT_STEP)
     public Step generateVepInputStep(StepBuilderFactory stepBuilderFactory, JobOptions jobOptions) {

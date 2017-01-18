@@ -19,6 +19,7 @@ import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.core.io.FileSystemResource;
+import uk.ac.ebi.eva.pipeline.model.IVariant;
 import uk.ac.ebi.eva.pipeline.model.VariantWrapper;
 
 import java.io.File;
@@ -35,7 +36,7 @@ import java.io.File;
  * further format description: {@see http://www.ensembl.org/info/docs/tools/vep/vep_formats.html#input}
  */
 
-public class VepInputFlatFileWriter extends FlatFileItemWriter<VariantWrapper> {
+public class VepInputFlatFileWriter extends FlatFileItemWriter<IVariant> {
 
     /**
      * @return must return a {@link FlatFileItemWriter} and not a {@link org.springframework.batch.item.ItemWriter}
@@ -46,10 +47,10 @@ public class VepInputFlatFileWriter extends FlatFileItemWriter<VariantWrapper> {
     public VepInputFlatFileWriter(File file) {
         super();
 
-        BeanWrapperFieldExtractor<VariantWrapper> fieldExtractor = new BeanWrapperFieldExtractor<>();
+        BeanWrapperFieldExtractor<IVariant> fieldExtractor = new BeanWrapperFieldExtractor<>();
         fieldExtractor.setNames(new String[]{"chr", "start", "end", "refAlt", "strand"});
 
-        DelimitedLineAggregator<VariantWrapper> delLineAgg = new DelimitedLineAggregator<>();
+        DelimitedLineAggregator<IVariant> delLineAgg = new DelimitedLineAggregator<>();
         delLineAgg.setDelimiter("\t");
         delLineAgg.setFieldExtractor(fieldExtractor);
 

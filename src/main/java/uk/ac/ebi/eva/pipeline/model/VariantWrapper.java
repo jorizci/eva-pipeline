@@ -20,7 +20,7 @@ import org.opencb.biodata.models.variant.Variant;
 /**
  * Container for {@link Variant} including strand. By default strand in VCF is always '+'
  */
-public class VariantWrapper {
+public class VariantWrapper implements IVariant {
 
     private Variant variant;
     private String strand = "+";

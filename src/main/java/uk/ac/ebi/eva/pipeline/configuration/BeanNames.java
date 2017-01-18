@@ -55,4 +55,24 @@ public class BeanNames {
     public static final String GENOTYPED_VCF_JOB = "genotyped-vcf-job";
     public static final String CALCULATE_STATISTICS_JOB = "calculate-statistics-job";
 
+    //t2d bean names
+    public static final String T2D_JOB = "t2d-job";
+    public static final String T2D_LOAD_STATISTICS_FLOW = "t2d-load-statistics-flow";
+
+    public static final String T2D_LOAD_VCF_STEP = "t2d-load-vcf-step";
+    public static final String T2D_PREPARE_DATABASE_STEP = "t2d-prepare-database-step";
+    public static final String T2D_LOAD_STATISTICS_STEP = "t2d-load-statistics-step";
+    public static final String T2D_GENERATE_VEP_INPUT_STEP = "t2d-generate-vep-input-step";
+
+    public static final String T2D_STATISTICS_READER = "t2d-statistics-reader";
+    public static final String T2D_VCF_READER = "t2d-vcf-reader";
+    public static final String T2D_VARIANTS_TO_ANNOTATE_READER = "t2d-variants-to-annotate-reader";
+    public static final String T2D_MULTI_STATISTIC_FILES_READER = "t2d-multi-statistic-files-reader";
+
+    public static final String T2D_STATISTICS_WRITER = "t2d-statistics-writer";
+    public static final String T2D_VARIANTS_TO_ANNOTATE_WRITER = "t2d-variants-to-annotate-writer";
+    public static final String T2D_VARIANT_STUDY_T2D_WRITER = "t2d-variant-study-writer";
+    public static final String T2D_COMPOSITE_WRITER = "t2d-composite-writer";
+    public static final String T2D_VEP_ANNOTATION_WRITER = "t2d-vep-annotation-writer";
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 EMBL - European Bioinformatics Institute
+ * Copyright 2016-2017 EMBL - European Bioinformatics Institute
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.ebi.eva.pipeline.jobs;
+package uk.ac.ebi.eva.pipeline.t2d.jobs;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,39 +31,32 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
+import uk.ac.ebi.eva.pipeline.Application;
 import uk.ac.ebi.eva.pipeline.jobs.flows.AnnotationFlowOptional;
-import uk.ac.ebi.eva.pipeline.jobs.steps.LoadFileStep;
-import uk.ac.ebi.eva.pipeline.jobs.steps.VariantLoaderStep;
 import uk.ac.ebi.eva.pipeline.listeners.VariantOptionsConfigurerListener;
+import uk.ac.ebi.eva.pipeline.t2d.jobs.flows.T2dLoadStatisticsFlow;
+import uk.ac.ebi.eva.pipeline.t2d.jobs.steps.T2dLoadVcf;
 
-import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.AGGREGATED_VCF_JOB;
-import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.LOAD_FILE_STEP;
-import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.LOAD_VARIANTS_STEP;
+import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.T2D_JOB;
+import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.T2D_LOAD_STATISTICS_FLOW;
+import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.T2D_LOAD_VCF_STEP;
+import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.T2D_PREPARE_DATABASE_STEP;
 import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.VEP_ANNOTATION_OPTIONAL_FLOW;
 
-/**
- * Complete pipeline workflow for aggregated VCF. Aggregated statistics are provided in the VCF instead of the
- * genotypes.
- * <p>
- * load --> (optionalAnnotationFlow: variantsAnnotGenerateInput --> (annotationCreate --> annotationLoad))
- * <p>
- * Steps in () are optional
- */
 @Configuration
+@Profile(Application.T2D_PROFILE)
 @EnableBatchProcessing
-@Import({VariantLoaderStep.class, LoadFileStep.class, AnnotationFlowOptional.class})
-public class AggregatedVcfJob {
+@Import({T2dLoadStatisticsFlow.class, AnnotationFlowOptional.class, T2dLoadVcf.class})
+public class LoadVcfT2dJob {
 
-    private static final Logger logger = LoggerFactory.getLogger(AggregatedVcfJob.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoadVcfT2dJob.class);
 
     //job default settings
     private static final boolean INCLUDE_SAMPLES = false;
-
     private static final boolean COMPRESS_GENOTYPES = false;
-
     private static final boolean CALCULATE_STATS = true;
-
     private static final boolean INCLUDE_STATS = true;
 
     @Autowired
@@ -71,26 +64,30 @@ public class AggregatedVcfJob {
     private Flow annotationFlowOptional;
 
     @Autowired
-    @Qualifier(LOAD_VARIANTS_STEP)
-    private Step variantLoaderStep;
+    @Qualifier(T2D_LOAD_STATISTICS_FLOW)
+    private Flow t2dOptionalLoadStatistics;
 
     @Autowired
-    @Qualifier(LOAD_FILE_STEP)
-    private Step loadFileStep;
+    @Qualifier(T2D_LOAD_VCF_STEP)
+    private Step t2dLoadStep;
 
-    @Bean(AGGREGATED_VCF_JOB)
-    @Scope("prototype")
-    public Job aggregatedVcfJob(JobBuilderFactory jobBuilderFactory) {
-        logger.debug("Building '" + AGGREGATED_VCF_JOB + "'");
+    @Autowired
+    @Qualifier(T2D_PREPARE_DATABASE_STEP)
+    private Step t2dPrepareDatabaseStep;
+
+    @Bean(T2D_JOB)
+    public Job aggregatedJobT2d(JobBuilderFactory jobBuilderFactory) {
+        logger.debug("Building variant job - t2d");
 
         JobBuilder jobBuilder = jobBuilderFactory
-                .get(AGGREGATED_VCF_JOB)
+                .get(T2D_JOB)
                 .incrementer(new RunIdIncrementer())
                 .listener(aggregatedJobListener());
 
         FlowJobBuilder builder = jobBuilder
-                .flow(variantLoaderStep)
-                .next(loadFileStep)
+                .flow(t2dPrepareDatabaseStep)
+                .next(t2dLoadStep)
+                .next(t2dOptionalLoadStatistics)
                 .next(annotationFlowOptional)
                 .end();
 
@@ -99,10 +96,11 @@ public class AggregatedVcfJob {
 
     @Bean
     @Scope("prototype")
-    JobExecutionListener aggregatedJobListener() {
+    public JobExecutionListener aggregatedJobListener() {
         return new VariantOptionsConfigurerListener(INCLUDE_SAMPLES,
                 COMPRESS_GENOTYPES,
                 CALCULATE_STATS,
                 INCLUDE_STATS);
     }
+
 }

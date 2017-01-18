@@ -20,7 +20,7 @@ import org.springframework.batch.item.ItemStreamWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.ac.ebi.eva.pipeline.io.writers.VepInputFlatFileWriter;
-import uk.ac.ebi.eva.pipeline.model.VariantWrapper;
+import uk.ac.ebi.eva.pipeline.model.IVariant;
 import uk.ac.ebi.eva.pipeline.parameters.JobOptions;
 
 import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.VEP_INPUT_WRITER;
@@ -30,7 +30,7 @@ public class VepInputFlatFileWriterConfiguration {
 
     @Bean(VEP_INPUT_WRITER)
     @StepScope
-    public ItemStreamWriter<VariantWrapper> vepInputFlatFileWriter(JobOptions jobOptions) {
+    public ItemStreamWriter<IVariant> vepInputFlatFileWriter(JobOptions jobOptions) {
         return new VepInputFlatFileWriter(jobOptions.getVepInput());
     }
 

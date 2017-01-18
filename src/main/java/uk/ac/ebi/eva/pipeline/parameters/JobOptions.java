@@ -301,4 +301,13 @@ public class JobOptions {
     public MongoConnection getMongoConnection() {
         return new MongoConnection(dbHosts, dbAuthenticationDb, dbUser, dbPassword, readPreference);
     }
+
+    public void setInputVcf(String inputVcf) {
+        input = inputVcf;
+        pipelineOptions.put(JobParametersNames.INPUT_VCF, input);
+    }
+
+    public String getInputVcf(){
+        return input;
+    }
 }

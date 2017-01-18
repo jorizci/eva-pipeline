@@ -30,6 +30,7 @@ import uk.ac.ebi.eva.pipeline.jobs.steps.AnnotationLoaderStep;
 import uk.ac.ebi.eva.pipeline.jobs.steps.GenerateVepAnnotationStep;
 import uk.ac.ebi.eva.pipeline.jobs.steps.VepInputGeneratorStep;
 import uk.ac.ebi.eva.pipeline.parameters.JobOptions;
+import uk.ac.ebi.eva.pipeline.t2d.jobs.steps.VepInputGeneratorStepT2d;
 
 import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.GENERATE_VEP_ANNOTATION_STEP;
 import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.GENERATE_VEP_INPUT_STEP;
@@ -44,7 +45,8 @@ import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.VEP_ANNOTATION_FLOW
  */
 @Configuration
 @EnableBatchProcessing
-@Import({VepInputGeneratorStep.class, AnnotationLoaderStep.class, GenerateVepAnnotationStep.class})
+@Import({VepInputGeneratorStep.class, VepInputGeneratorStepT2d.class, AnnotationLoaderStep.class,
+        GenerateVepAnnotationStep.class})
 public class AnnotationFlow {
 
     @Autowired

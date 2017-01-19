@@ -38,6 +38,7 @@ import uk.ac.ebi.eva.pipeline.io.writers.VepAnnotationMongoWriter;
 import uk.ac.ebi.eva.pipeline.listeners.SkippedItemListener;
 import uk.ac.ebi.eva.pipeline.parameters.JobOptions;
 import uk.ac.ebi.eva.pipeline.parameters.JobParametersNames;
+import uk.ac.ebi.eva.pipeline.t2d.configuration.writers.VepAnnotationT2dWriterConfiguration;
 
 import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.LOAD_VEP_ANNOTATION_STEP;
 import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.VARIANT_ANNOTATION_READER;
@@ -60,7 +61,8 @@ import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.VARIANT_ANNOTATION_
 
 @Configuration
 @EnableBatchProcessing
-@Import({VariantAnnotationReaderConfiguration.class, VariantAnnotationWriterConfiguration.class})
+@Import({VariantAnnotationReaderConfiguration.class, VariantAnnotationWriterConfiguration.class,
+        VepAnnotationT2dWriterConfiguration.class})
 public class AnnotationLoaderStep {
     private static final Logger logger = LoggerFactory.getLogger(AnnotationLoaderStep.class);
 

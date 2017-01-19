@@ -35,9 +35,9 @@ import uk.ac.ebi.eva.pipeline.parameters.JobParametersNames;
 import uk.ac.ebi.eva.pipeline.t2d.configuration.readers.VariantsToAnnotateReaderConfiguration;
 import uk.ac.ebi.eva.pipeline.t2d.io.readers.VariantsToAnnotateReader;
 
-import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.T2D_GENERATE_VEP_INPUT_STEP;
+import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.GENERATE_VEP_INPUT_STEP;
 import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.T2D_VARIANTS_TO_ANNOTATE_READER;
-import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.T2D_VEP_ANNOTATION_WRITER;
+import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.VEP_INPUT_WRITER;
 
 @Configuration
 @Profile(Application.T2D_PROFILE)
@@ -52,15 +52,15 @@ public class VepInputGeneratorStepT2d {
     private VariantsToAnnotateReader reader;
 
     @Autowired
-    @Qualifier(T2D_VEP_ANNOTATION_WRITER)
+    @Qualifier(VEP_INPUT_WRITER)
     private ItemStreamWriter<IVariant> writer;
 
-    @Bean(T2D_GENERATE_VEP_INPUT_STEP)
+    @Bean(GENERATE_VEP_INPUT_STEP)
     public Step variantsAnnotGenerateInputBatchStep(StepBuilderFactory stepBuilderFactory, JobOptions jobOptions) {
-        logger.debug("Building '" + T2D_GENERATE_VEP_INPUT_STEP + "'");
+        logger.debug("Building '" + GENERATE_VEP_INPUT_STEP + "' - t2d version");
         Boolean canRestart = jobOptions.getPipelineOptions().getBoolean(JobParametersNames.CONFIG_RESTARTABILITY_ALLOW);
 
-        return stepBuilderFactory.get(T2D_GENERATE_VEP_INPUT_STEP).<IVariant, IVariant>chunk(10)
+        return stepBuilderFactory.get(GENERATE_VEP_INPUT_STEP).<IVariant, IVariant>chunk(10)
                 .reader(reader)
                 .writer(writer)
                 .allowStartIfComplete(canRestart)

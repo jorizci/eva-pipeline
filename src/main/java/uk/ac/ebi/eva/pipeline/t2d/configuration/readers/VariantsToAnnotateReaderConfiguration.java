@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.Profile;
 import uk.ac.ebi.eva.pipeline.Application;
 import uk.ac.ebi.eva.pipeline.t2d.configuration.T2dDataSourceConfiguration;
 import uk.ac.ebi.eva.pipeline.t2d.io.readers.VariantsToAnnotateReader;
+import uk.ac.ebi.eva.pipeline.t2d.repository.VariantsToannotateRepository;
 
 import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.T2D_VARIANTS_TO_ANNOTATE_READER;
 
@@ -37,11 +39,16 @@ public class VariantsToAnnotateReaderConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(VariantsToAnnotateReaderConfiguration.class);
 
+    @Autowired
+    private VariantsToannotateRepository variantsToannotateRepository;
+
     @Bean(T2D_VARIANTS_TO_ANNOTATE_READER)
     @StepScope
     public VariantsToAnnotateReader variantsToAnnotateReader() {
         logger.debug("Building '" + T2D_VARIANTS_TO_ANNOTATE_READER + "'");
-        return new VariantsToAnnotateReader();
+        VariantsToAnnotateReader reader = new VariantsToAnnotateReader();
+        reader.setRepository(variantsToannotateRepository);
+        return reader;
     }
 
 }

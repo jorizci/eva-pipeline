@@ -14,7 +14,7 @@ import uk.ac.ebi.eva.pipeline.Application;
 import uk.ac.ebi.eva.pipeline.t2d.configuration.T2dDataSourceConfiguration;
 import uk.ac.ebi.eva.pipeline.t2d.io.writers.VepAnnotationT2dWriter;
 
-import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.T2D_VEP_ANNOTATION_WRITER;
+import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.VARIANT_ANNOTATION_WRITER;
 
 @Configuration
 @Profile(Application.T2D_PROFILE)
@@ -24,10 +24,10 @@ public class VepAnnotationT2dWriterConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(VepAnnotationT2dWriterConfiguration.class);
 
-    @Bean(T2D_VEP_ANNOTATION_WRITER)
+    @Bean(VARIANT_ANNOTATION_WRITER)
     @StepScope
     public ItemWriter<VariantAnnotation> variantAnnotationItemWriterT2d() {
-        logger.debug("Building '" + T2D_VEP_ANNOTATION_WRITER + "'");
+        logger.debug("Building '" + VARIANT_ANNOTATION_WRITER + "'");
         return new VepAnnotationT2dWriter();
     }
 

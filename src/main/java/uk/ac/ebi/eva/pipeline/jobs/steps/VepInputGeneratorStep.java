@@ -28,6 +28,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+import uk.ac.ebi.eva.pipeline.Application;
 import uk.ac.ebi.eva.pipeline.configuration.readers.NonAnnotatedVariantsMongoReaderConfiguration;
 import uk.ac.ebi.eva.pipeline.configuration.writers.VepInputFlatFileWriterConfiguration;
 import uk.ac.ebi.eva.pipeline.io.readers.NonAnnotatedVariantsMongoReader;
@@ -58,6 +60,7 @@ import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.VEP_INPUT_WRITER;
  * http://www.journaldev.com/966/java-gzip-example-compress-and-decompress-file-in-gzip-format-in-java
  */
 @Configuration
+@Profile("!"+Application.T2D_PROFILE)
 @EnableBatchProcessing
 @Import({NonAnnotatedVariantsMongoReaderConfiguration.class, VepInputFlatFileWriterConfiguration.class})
 public class VepInputGeneratorStep {

@@ -47,7 +47,7 @@ public class Application {
     /**
      * profile for the t2d-configuration
      */
-    public static final String T2D_PROFILE = "t2d-profile";
+    public static final String T2D_PROFILE = "t2d";
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Application.class, args);

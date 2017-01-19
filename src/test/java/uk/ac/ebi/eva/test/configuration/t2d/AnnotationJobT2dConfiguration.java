@@ -49,7 +49,6 @@ import javax.sql.DataSource;
 @Configuration
 @AutoConfigureDataJpa
 @PropertySource({"annotation-job.properties"})
-@Import({AnnotationJob.class})
 @EnableConfigurationProperties(value=BatchProperties.class)
 public class AnnotationJobT2dConfiguration {
 

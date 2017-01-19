@@ -62,7 +62,7 @@ public class BeanNames {
     public static final String T2D_LOAD_VCF_STEP = "t2d-load-vcf-step";
     public static final String T2D_PREPARE_DATABASE_STEP = "t2d-prepare-database-step";
     public static final String T2D_LOAD_STATISTICS_STEP = "t2d-load-statistics-step";
-    public static final String T2D_GENERATE_VEP_INPUT_STEP = "t2d-generate-vep-input-step";
+//    public static final String T2D_GENERATE_VEP_INPUT_STEP = "t2d-generate-vep-input-step";
 
     public static final String T2D_STATISTICS_READER = "t2d-statistics-reader";
     public static final String T2D_VCF_READER = "t2d-vcf-reader";
@@ -73,6 +73,6 @@ public class BeanNames {
     public static final String T2D_VARIANTS_TO_ANNOTATE_WRITER = "t2d-variants-to-annotate-writer";
     public static final String T2D_VARIANT_STUDY_T2D_WRITER = "t2d-variant-study-writer";
     public static final String T2D_COMPOSITE_WRITER = "t2d-composite-writer";
-    public static final String T2D_VEP_ANNOTATION_WRITER = "t2d-vep-annotation-writer";
+//    public static final String T2D_VEP_ANNOTATION_WRITER = "t2d-vep-annotation-writer";
 
 }

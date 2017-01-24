@@ -24,13 +24,12 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemStreamReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import uk.ac.ebi.eva.commons.models.data.Variant;
 import uk.ac.ebi.eva.pipeline.Application;
 import uk.ac.ebi.eva.pipeline.io.readers.UnwindingItemStreamReader;
 import uk.ac.ebi.eva.pipeline.parameters.JobOptions;
-import uk.ac.ebi.eva.pipeline.t2d.configuration.T2dDataSourceConfiguration;
+import uk.ac.ebi.eva.pipeline.parameters.JobParametersNames;
 import uk.ac.ebi.eva.pipeline.t2d.io.readers.VcfReaderT2d;
 
 import java.io.IOException;
@@ -48,8 +47,9 @@ public class T2dVcfReaderConfiguration {
     @StepScope
     public ItemStreamReader<Variant> t2dVcfReader(JobOptions jobOptions) throws IOException {
         logger.debug("Building '" + T2D_VCF_READER + "'");
+        String inputVcf = (String) jobOptions.getPipelineOptions().get(JobParametersNames.INPUT_VCF);
         VariantSource variantSource = (VariantSource) jobOptions.getVariantOptions().get(VariantStorageManager.VARIANT_SOURCE);
-        VcfReaderT2d vcfReader = new VcfReaderT2d(jobOptions.getVepInput(), variantSource);
+        VcfReaderT2d vcfReader = new VcfReaderT2d(inputVcf, variantSource);
         return new UnwindingItemStreamReader<>(vcfReader);
     }
 

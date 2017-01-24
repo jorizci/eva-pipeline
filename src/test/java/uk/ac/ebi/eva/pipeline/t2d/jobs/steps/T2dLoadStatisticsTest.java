@@ -1,0 +1,61 @@
+package uk.ac.ebi.eva.pipeline.t2d.jobs.steps;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.test.JobLauncherTestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
+import uk.ac.ebi.eva.pipeline.Application;
+import uk.ac.ebi.eva.pipeline.configuration.BeanNames;
+import uk.ac.ebi.eva.pipeline.parameters.JobOptions;
+import uk.ac.ebi.eva.pipeline.t2d.jobs.LoadVcfT2dJob;
+import uk.ac.ebi.eva.test.configuration.t2d.T2dTestConfiguration;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import static org.junit.Assert.assertEquals;
+import static org.springframework.batch.core.ExitStatus.COMPLETED;
+import static uk.ac.ebi.eva.pipeline.parameters.JobParametersNames.T2D_INPUT_STUDY_STATISTICS;
+import static uk.ac.ebi.eva.pipeline.t2d.configuration.T2dDataSourceConfiguration.T2D_PERSISTENCE_UNIT;
+import static uk.ac.ebi.eva.test.utils.TestFileUtils.getResource;
+
+@RunWith(SpringRunner.class)
+@ActiveProfiles({Application.T2D_PROFILE})
+@ContextConfiguration(classes = {LoadVcfT2dJob.class, T2dTestConfiguration.class})
+@TestPropertySource({"classpath:application-t2d.properties"})
+public class T2dLoadStatisticsTest {
+
+    private static final String STATISTICS_1 = "/statistics/t2d/t2dStats1.txt";
+    private static final String STATISTICS_2 = "/statistics/t2d/t2dStats2.txt";
+
+    @Autowired
+    private JobOptions jobOptions;
+
+    @Autowired
+    @PersistenceContext(unitName = T2D_PERSISTENCE_UNIT)
+    private EntityManager entityManager;
+
+    @Autowired
+    private JobLauncherTestUtils jobLauncherTestUtils;
+
+    @Test
+    public void testLoadStatistics() {
+        // Set input vcf
+        jobOptions.setInputVcf(getResource(jobOptions.getInputVcf()).getAbsolutePath());
+        // Set statistics
+        String files = getResource(STATISTICS_1).getAbsolutePath() + "," + getResource(STATISTICS_2).getAbsolutePath();
+        System.setProperty(T2D_INPUT_STUDY_STATISTICS, files);
+        //First we initializate database appropriatedly
+        JobExecution jobExecution = jobLauncherTestUtils.launchStep(BeanNames.T2D_PREPARE_DATABASE_STEP);
+        assertEquals(COMPLETED, jobExecution.getExitStatus());
+        JobExecution jobExecutionLoadStep = jobLauncherTestUtils.launchStep(BeanNames.T2D_LOAD_STATISTICS_STEP);
+        assertEquals(COMPLETED, jobExecutionLoadStep.getExitStatus());
+
+    }
+
+}

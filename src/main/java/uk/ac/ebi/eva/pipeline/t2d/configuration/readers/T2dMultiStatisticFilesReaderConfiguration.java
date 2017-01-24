@@ -48,16 +48,15 @@ public class T2dMultiStatisticFilesReaderConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(T2dStatisticsWriterConfiguration.class);
 
-    @Value("${" + JobParametersNames.T2D_INPUT_STUDY_STATISTICS + ":#{new String[]{}}}")
-    private String[] t2dStatisticsFiles;
-
     @Autowired
     @Qualifier(T2D_STATISTICS_READER)
     private T2dStatisticsReader t2dStatisticsReader;
 
     @Bean(T2D_MULTI_STATISTIC_FILES_READER)
     @StepScope
-    public MultiResourceItemReader<T2dStatistics> multiResourceItemReader() {
+    public MultiResourceItemReader<T2dStatistics> multiResourceItemReader(
+            @Value("${" + JobParametersNames.T2D_INPUT_STUDY_STATISTICS + ":#{new String[]{}}}")
+                    String[] t2dStatisticsFiles) {
         logger.debug("Building '" + T2D_MULTI_STATISTIC_FILES_READER + "'");
         Resource[] resources = Arrays.stream(t2dStatisticsFiles).map(FileSystemResource::new).toArray(Resource[]::new);
         MultiResourceItemReader<T2dStatistics> multipleItemReader = new MultiResourceItemReader<>();

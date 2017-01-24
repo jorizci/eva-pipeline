@@ -113,7 +113,7 @@ public class T2dTestConfiguration {
     @Primary
     public DataSource inMemoryDatasource() {
         return DataSourceBuilder.create().driverClassName("org.h2.Driver")
-                .url("jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE").username("sa").password("").build();
+                .url("jdbc:h2:mem:testdb;mode=MySQL;DB_CLOSE_ON_EXIT=FALSE").username("sa").password("").build();
     }
 
     @Bean

@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -41,6 +42,7 @@ public class T2dPrepareDatabase {
     private static final Logger logger = LoggerFactory.getLogger(T2dPrepareDatabase.class);
 
     @Bean
+    @StepScope
     public PrepareDatabaseT2dStep prepareDatabaseT2dStep() {
         return new PrepareDatabaseT2dStep();
     }

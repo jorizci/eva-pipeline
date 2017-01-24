@@ -38,6 +38,7 @@ public class VariantInfoRepositoryTest {
     private static final String EFFECT_ALLELE = "G";
     private static final String GENE = "CC2D2A";
     private static final String CONSEQUENCE = "intron_variant";
+
     @Autowired
     private VariantInfoRepository repository;
 

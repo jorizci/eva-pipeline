@@ -38,6 +38,7 @@ import uk.ac.ebi.eva.pipeline.jobs.flows.AnnotationFlowOptional;
 import uk.ac.ebi.eva.pipeline.listeners.VariantOptionsConfigurerListener;
 import uk.ac.ebi.eva.pipeline.t2d.jobs.flows.T2dLoadStatisticsFlow;
 import uk.ac.ebi.eva.pipeline.t2d.jobs.steps.T2dLoadVcf;
+import uk.ac.ebi.eva.pipeline.t2d.jobs.steps.T2dPrepareDatabase;
 
 import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.T2D_JOB;
 import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.T2D_LOAD_STATISTICS_FLOW;
@@ -48,7 +49,7 @@ import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.VEP_ANNOTATION_OPTI
 @Configuration
 @Profile(Application.T2D_PROFILE)
 @EnableBatchProcessing
-@Import({T2dLoadStatisticsFlow.class, AnnotationFlowOptional.class, T2dLoadVcf.class})
+@Import({AnnotationFlowOptional.class, T2dLoadStatisticsFlow.class, T2dLoadVcf.class, T2dPrepareDatabase.class})
 public class LoadVcfT2dJob {
 
     private static final Logger logger = LoggerFactory.getLogger(LoadVcfT2dJob.class);

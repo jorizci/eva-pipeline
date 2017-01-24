@@ -35,11 +35,12 @@ public class DatasetMetadataRepositoryImpl implements T2dRepository {
     @Modifying
     @Transactional(T2D_TRANSACTION_MANAGER)
     public void createTable(String tableName, String... statisticParameters) {
-        String query = "CREATE TABLE IF NOT EXISTS " + tableName + " (U_VAR_ID VARCHAR(191), VAR_ID TEXT";
+        String query = "CREATE TABLE IF NOT EXISTS " + tableName + " (`U_VAR_ID` VARCHAR(191), `VAR_ID` TEXT";
         for (String staticParameter : statisticParameters) {
             query += ", " + staticParameter + " TEXT";
         }
-        query += ", PRIMARY KEY (`U_VAR_ID`), KEY `VAR_ID` (`VAR_ID`(191)) ";
+        query += ", PRIMARY KEY (`U_VAR_ID`)";
+//        query += ", KEY `VAR_ID` (`VAR_ID`(191)) ";
         query += ")";
         entityManager.createNativeQuery(query).executeUpdate();
     }

@@ -31,6 +31,7 @@ import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -42,9 +43,16 @@ import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.PlatformTransactionManager;
 import uk.ac.ebi.eva.pipeline.jobs.AnnotationJob;
+import uk.ac.ebi.eva.pipeline.parameters.JobOptions;
+import uk.ac.ebi.eva.pipeline.t2d.configuration.T2dDataSourceConfiguration;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
+
+import static uk.ac.ebi.eva.pipeline.t2d.configuration.T2dDataSourceConfiguration.T2D_PERSISTENCE_UNIT;
 
 @Configuration
 @AutoConfigureDataJpa
@@ -54,6 +62,11 @@ public class AnnotationJobT2dConfiguration {
 
     private final static Logger logger = LoggerFactory.getLogger(AnnotationJobT2dConfiguration.class);
     private static final String IN_MEMORY_DATASOURCE = "inMemoryDatasource";
+
+    @Bean
+    public JobOptions jobOptions() {
+        return new JobOptions();
+    }
 
     @Bean
     public JobLauncherTestUtils jobLauncherTestUtils() {

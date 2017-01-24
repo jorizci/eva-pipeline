@@ -78,7 +78,7 @@ public class T2dTestConfiguration {
     @PostConstruct
     protected void initialize() {
         if (this.properties.getInitializer().isEnabled()) {
-            String platform = "hsqldb";
+            String platform = "h2";
             ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
             String schemaLocation = this.properties.getSchema();
             schemaLocation = schemaLocation.replace("@@platform@@", platform);
@@ -100,7 +100,7 @@ public class T2dTestConfiguration {
         JobRepositoryFactoryBean jobRepositoryFactoryBean = new JobRepositoryFactoryBean();
         jobRepositoryFactoryBean.setDataSource(inMemoryDatasource());
         jobRepositoryFactoryBean.setTransactionManager(inMemoryTransactionManager());
-        jobRepositoryFactoryBean.setDatabaseType("hsql");
+        jobRepositoryFactoryBean.setDatabaseType("h2");
         return jobRepositoryFactoryBean.getObject();
     }
 
@@ -112,8 +112,8 @@ public class T2dTestConfiguration {
     @Bean(name = IN_MEMORY_DATASOURCE)
     @Primary
     public DataSource inMemoryDatasource() {
-        return DataSourceBuilder.create().driverClassName("org.hsqldb.jdbcDriver")
-                .url("jdbc:hsqldb:mem:testdb;DB_CLOSE_ON_EXIT=FALSE").username("sa").password("").build();
+        return DataSourceBuilder.create().driverClassName("org.h2.Driver")
+                .url("jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE").username("sa").password("").build();
     }
 
     @Bean

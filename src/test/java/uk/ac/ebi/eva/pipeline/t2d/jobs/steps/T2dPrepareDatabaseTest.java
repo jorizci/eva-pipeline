@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import uk.ac.ebi.eva.pipeline.Application;
 import uk.ac.ebi.eva.pipeline.configuration.BeanNames;
 import uk.ac.ebi.eva.pipeline.t2d.jobs.LoadVcfT2dJob;
-import uk.ac.ebi.eva.test.configuration.t2d.AnnotationJobT2dConfiguration;
+import uk.ac.ebi.eva.test.configuration.t2d.T2dTestConfiguration;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,7 +23,7 @@ import static uk.ac.ebi.eva.pipeline.t2d.configuration.T2dDataSourceConfiguratio
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles({Application.T2D_PROFILE})
-@ContextConfiguration(classes = {LoadVcfT2dJob.class, AnnotationJobT2dConfiguration.class})
+@ContextConfiguration(classes = {LoadVcfT2dJob.class, T2dTestConfiguration.class})
 @TestPropertySource({"classpath:application-t2d.properties"})
 public class T2dPrepareDatabaseTest {
 

@@ -31,10 +31,8 @@ import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -42,25 +40,18 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.PlatformTransactionManager;
-import uk.ac.ebi.eva.pipeline.jobs.AnnotationJob;
 import uk.ac.ebi.eva.pipeline.parameters.JobOptions;
-import uk.ac.ebi.eva.pipeline.t2d.configuration.T2dDataSourceConfiguration;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
-
-import static uk.ac.ebi.eva.pipeline.t2d.configuration.T2dDataSourceConfiguration.T2D_PERSISTENCE_UNIT;
 
 @Configuration
 @AutoConfigureDataJpa
 @PropertySource({"annotation-job.properties"})
 @EnableConfigurationProperties(value=BatchProperties.class)
-public class AnnotationJobT2dConfiguration {
+public class T2dTestConfiguration {
 
-    private final static Logger logger = LoggerFactory.getLogger(AnnotationJobT2dConfiguration.class);
+    private final static Logger logger = LoggerFactory.getLogger(T2dTestConfiguration.class);
     private static final String IN_MEMORY_DATASOURCE = "inMemoryDatasource";
 
     @Bean

@@ -6,6 +6,9 @@ import org.junit.runner.RunWith;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -35,9 +38,11 @@ import static uk.ac.ebi.eva.test.utils.TestFileUtils.getResource;
 @RunWith(SpringRunner.class)
 @ActiveProfiles({Application.T2D_PROFILE})
 @ContextConfiguration(classes = {LoadVcfT2dJob.class, T2dTestConfiguration.class})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @TestPropertySource({"classpath:application-t2d.properties"})
 public class T2dAnnotationTest {
 
+    private static final String SMALL_20 = "/small20.vcf.gz";
     private static final String MOCK_VEP = "/mockvep.pl";
 
     @Rule
@@ -55,7 +60,7 @@ public class T2dAnnotationTest {
 
     @Test
     public void generateVepInput() throws IOException {
-        jobOptions.setInputVcf(getResource(jobOptions.getInputVcf()).getAbsolutePath());
+        jobOptions.setInputVcf(getResource(SMALL_20).getAbsolutePath());
         File mockVep = temporaryFolderRule.newGzipFile(String.join("",Files.readAllLines(getResource(MOCK_VEP)
                         .toPath(),StandardCharsets.UTF_8)));
         jobOptions.setVepOutput(mockVep.getAbsolutePath());

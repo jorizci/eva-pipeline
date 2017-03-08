@@ -5,6 +5,9 @@ import org.junit.runner.RunWith;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -24,6 +27,7 @@ import static uk.ac.ebi.eva.pipeline.t2d.configuration.T2dDataSourceConfiguratio
 @RunWith(SpringRunner.class)
 @ActiveProfiles({Application.T2D_PROFILE})
 @ContextConfiguration(classes = {LoadVcfT2dJob.class, T2dTestConfiguration.class})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @TestPropertySource({"classpath:application-t2d.properties"})
 public class T2dPrepareDatabaseTest {
 

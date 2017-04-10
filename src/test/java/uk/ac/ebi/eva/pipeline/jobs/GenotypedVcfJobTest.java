@@ -41,6 +41,7 @@ import uk.ac.ebi.eva.utils.EvaJobParameterBuilder;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
+import static uk.ac.ebi.eva.test.utils.GenotypedVcfJobTestUtils.COLLECTION_ANNOTATIONS_NAME;
 
 /**
  * Test for {@link GenotypedVcfJob}
@@ -84,6 +85,7 @@ public class GenotypedVcfJobTest {
 
         // Run the Job
         JobParameters jobParameters = new EvaJobParameterBuilder()
+                .collectionAnnotationsName(COLLECTION_ANNOTATIONS_NAME)
                 .collectionAnnotationMetadataName(GenotypedVcfJobTestUtils.COLLECTION_ANNOTATION_METADATA_NAME)
                 .collectionFilesName(GenotypedVcfJobTestUtils.COLLECTION_FILES_NAME)
                 .collectionVariantsName(GenotypedVcfJobTestUtils.COLLECTION_VARIANTS_NAME)
@@ -121,7 +123,7 @@ public class GenotypedVcfJobTest {
 
         GenotypedVcfJobTestUtils.checkOutputFileLength(vepOutputFile);
 
-        GenotypedVcfJobTestUtils.checkLoadedAnnotation(databaseName);
+        GenotypedVcfJobTestUtils.checkLoadedAnnotation(mongoRule, databaseName);
 
         GenotypedVcfJobTestUtils.checkSkippedOneMalformedLine(jobExecution);
 
@@ -139,6 +141,7 @@ public class GenotypedVcfJobTest {
         File fasta = temporaryFolderRule.newFile();
 
         JobParameters jobParameters = new EvaJobParameterBuilder()
+                .collectionAnnotationsName(COLLECTION_ANNOTATIONS_NAME)
                 .collectionAnnotationMetadataName(GenotypedVcfJobTestUtils.COLLECTION_ANNOTATION_METADATA_NAME)
                 .collectionFilesName(GenotypedVcfJobTestUtils.COLLECTION_FILES_NAME)
                 .collectionVariantsName(GenotypedVcfJobTestUtils.COLLECTION_VARIANTS_NAME)

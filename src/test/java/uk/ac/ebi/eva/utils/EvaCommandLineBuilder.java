@@ -171,4 +171,8 @@ public class EvaCommandLineBuilder {
     public EvaCommandLineBuilder dbCollectionsAnnotationMetadataName(String name) {
         return addString(JobParametersNames.DB_COLLECTIONS_ANNOTATION_METADATA_NAME, name);
     }
+
+    public EvaCommandLineBuilder dbCollectionsAnnotationsName(String name) {
+        return addString(JobParametersNames.DB_COLLECTIONS_ANNOTATIONS_NAME, name);
+    }
 }

@@ -52,6 +52,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static uk.ac.ebi.eva.test.utils.GenotypedVcfJobTestUtils.COLLECTION_ANNOTATIONS_NAME;
 import static uk.ac.ebi.eva.utils.FileUtils.getResource;
 
 /**
@@ -220,9 +221,10 @@ public class GenotypedVcfJobWorkflowTest {
         File fasta = temporaryFolderRule.newFile();
 
         EvaJobParameterBuilder evaJobParameterBuilder = new EvaJobParameterBuilder()
+                .collectionAnnotationsName(COLLECTION_ANNOTATIONS_NAME)
+                .collectionAnnotationMetadataName("annotationMetadata")
                 .collectionFilesName("files")
                 .collectionVariantsName("variants")
-                .collectionAnnotationMetadataName("annotationMetadata")
                 .databaseName(dbName)
                 .inputFasta(fasta.getAbsolutePath())
                 .inputStudyId("genotyped-job-workflow")

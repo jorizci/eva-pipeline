@@ -41,9 +41,7 @@ public class VariantMongoWriter extends MongoItemWriter<Variant> {
 
     private static final Logger logger = LoggerFactory.getLogger(VariantMongoWriter.class);
 
-    private static final String ANNOTATION_CT_SO_FIELD = "annot.ct.so";
-
-    private static final String ANNOTATION_XREF_ID_FIELD = "annot.xrefs.id";
+    private static final String VARIANT_ANNOTATION_SO_FIELD = "so";
 
     private final MongoOperations mongoOperations;
 
@@ -70,7 +68,7 @@ public class VariantMongoWriter extends MongoItemWriter<Variant> {
         this.statsConverter = includeStats ? new VariantStatsToDBObjectConverter() : null;
         SamplesToDBObjectConverter sampleConverter = includeSamples ? new SamplesToDBObjectConverter() : null;
         this.sourceEntryConverter = new VariantSourceEntryToDBObjectConverter(sampleConverter);
-        this.variantConverter = new VariantToDBObjectConverter(null, null, null);
+        this.variantConverter = new VariantToDBObjectConverter();
     }
 
     @Override
@@ -118,10 +116,7 @@ public class VariantMongoWriter extends MongoItemWriter<Variant> {
                 new BasicDBObject(MongoDBHelper.BACKGROUND_INDEX, true));
 
         mongoOperations.getCollection(collection).createIndex(
-                new BasicDBObject(ANNOTATION_XREF_ID_FIELD, 1),
-                new BasicDBObject(MongoDBHelper.BACKGROUND_INDEX, true));
-        mongoOperations.getCollection(collection).createIndex(
-                new BasicDBObject(ANNOTATION_CT_SO_FIELD, 1),
+                new BasicDBObject(VARIANT_ANNOTATION_SO_FIELD, 1),
                 new BasicDBObject(MongoDBHelper.BACKGROUND_INDEX, true));
     }
 

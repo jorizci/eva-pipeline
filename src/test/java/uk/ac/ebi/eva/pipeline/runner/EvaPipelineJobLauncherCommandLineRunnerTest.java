@@ -30,7 +30,6 @@ import org.springframework.boot.test.rule.OutputCapture;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import uk.ac.ebi.eva.test.rules.PipelineTemporaryFolderRule;
 import uk.ac.ebi.eva.test.rules.TemporaryMongoRule;
 import uk.ac.ebi.eva.test.utils.GenotypedVcfJobTestUtils;
@@ -46,7 +45,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static uk.ac.ebi.eva.pipeline.configuration.BeanNames.GENOTYPED_VCF_JOB;
 import static uk.ac.ebi.eva.pipeline.runner.EvaPipelineJobLauncherCommandLineRunner.SPRING_BATCH_JOB_NAME_PROPERTY;
-import static uk.ac.ebi.eva.test.utils.GenotypedVcfJobTestUtils.COLLECTION_ANNOTATIONS_NAME;
 import static uk.ac.ebi.eva.utils.FileUtils.getResource;
 
 /**
@@ -156,11 +154,11 @@ public class EvaPipelineJobLauncherCommandLineRunnerTest {
         assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
 
-        GenotypedVcfJobTestUtils.checkLoadStep(databaseName);
+        GenotypedVcfJobTestUtils.checkLoadStep(mongoRule, databaseName);
 
         GenotypedVcfJobTestUtils.checkCreateStatsStep(variantsStatsFile, sourceStatsFile);
 
-        GenotypedVcfJobTestUtils.checkLoadStatsStep(databaseName);
+        GenotypedVcfJobTestUtils.checkLoadStatsStep(mongoRule, databaseName);
 
         GenotypedVcfJobTestUtils.checkAnnotationCreateStep(vepOutputFile);
 
@@ -219,11 +217,11 @@ public class EvaPipelineJobLauncherCommandLineRunnerTest {
         assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
 
-        GenotypedVcfJobTestUtils.checkLoadStep(databaseName);
+        GenotypedVcfJobTestUtils.checkLoadStep(mongoRule, databaseName);
 
         GenotypedVcfJobTestUtils.checkCreateStatsStep(variantsStatsFile, sourceStatsFile);
 
-        GenotypedVcfJobTestUtils.checkLoadStatsStep(databaseName);
+        GenotypedVcfJobTestUtils.checkLoadStatsStep(mongoRule, databaseName);
 
         GenotypedVcfJobTestUtils.checkAnnotationCreateStep(vepOutputFile);
 

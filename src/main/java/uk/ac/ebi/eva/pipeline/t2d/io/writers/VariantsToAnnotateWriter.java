@@ -23,6 +23,7 @@ import uk.ac.ebi.eva.pipeline.t2d.repository.VariantInfoRepository;
 import uk.ac.ebi.eva.pipeline.t2d.repository.VariantsToannotateRepository;
 import uk.ac.ebi.eva.pipeline.t2d.utils.VariantUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VariantsToAnnotateWriter implements ItemWriter<Variant> {
@@ -36,10 +37,12 @@ public class VariantsToAnnotateWriter implements ItemWriter<Variant> {
 
     @Override
     public void write(List<? extends Variant> items) throws Exception {
+        List<VariantsToAnnotate> itemsToSave = new ArrayList<>();
         for (Variant item : items) {
-            if (!variantInfoRepository.exists(VariantUtils.getVariantId(item))) {
-                variantsToannotateRepository.save(new VariantsToAnnotate(item));
-            }
+//            if (!variantInfoRepository.exists(VariantUtils.getVariantId(item))) {
+                itemsToSave.add(new VariantsToAnnotate(item));
+//            }
         }
+        variantsToannotateRepository.save(itemsToSave);
     }
 }

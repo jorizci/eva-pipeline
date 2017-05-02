@@ -32,6 +32,9 @@ public class DatasetPhenotypeToTable {
     @Column(name = "TBL")
     private String tableName;
 
+    protected DatasetPhenotypeToTable() {
+    }
+
     public DatasetPhenotypeToTable(DatasetMetadata datasetMetadata, String phenotype) {
         datasetIdPhenotypeId = new DatasetIdPhenotypeId(datasetMetadata, phenotype);
         generateTableName();

@@ -15,30 +15,39 @@
  */
 package uk.ac.ebi.eva.pipeline.t2d.model;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class T2dStatistics {
 
-    private final String variantId;
-
     private final HashMap<String, String> statistics;
 
-    public T2dStatistics(String variantId) {
-        this.variantId = variantId;
+    public T2dStatistics() {
         statistics = new HashMap<>();
     }
 
-    public String getVariantId() {
-        return variantId;
+    public String getVariantId(String[] idKeys) {
+        return Arrays.stream(idKeys).map(idKey -> statistics.get(idKey)).collect(Collectors.joining("_"));
     }
 
-    public Map<String, String> getStatistics() {
-        return Collections.unmodifiableMap(statistics);
+    public Set<String> getStatisticsKeys(String[] idKeys) {
+        HashSet<String> statisticKeys = new HashSet<>(statistics.keySet());
+        for (String idKey : idKeys) {
+            statisticKeys.remove(idKey);
+        }
+        return statisticKeys;
     }
 
     public void putStatistic(String statisticsKey, String value) {
         statistics.put(statisticsKey, value);
+    }
+
+    public String getStatistic(String key) {
+        return statistics.get(key);
     }
 }

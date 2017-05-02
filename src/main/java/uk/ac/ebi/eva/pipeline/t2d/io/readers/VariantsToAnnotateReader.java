@@ -29,9 +29,10 @@ public class VariantsToAnnotateReader extends RepositoryItemReader<VariantsToAnn
     @Autowired
     private VariantsToannotateRepository variantsToannotateRepository;
 
-    public VariantsToAnnotateReader() {
+    public VariantsToAnnotateReader(int pageSize) {
         setRepository(variantsToannotateRepository);
         setMethodName("findAll");
+        setPageSize(pageSize);
         Map<String, Sort.Direction> sorts = new HashMap<>();
         sorts.put("id", Sort.Direction.ASC);
         setSort(sorts);

@@ -17,6 +17,8 @@ package uk.ac.ebi.eva.pipeline.t2d.io.writers;
 
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import uk.ac.ebi.eva.pipeline.parameters.JobParametersNames;
 import uk.ac.ebi.eva.pipeline.t2d.model.T2dStatistics;
 import uk.ac.ebi.eva.pipeline.t2d.repository.DatasetMetadataRepository;
 
@@ -27,15 +29,33 @@ public class T2dStatisticsWriter implements ItemWriter<T2dStatistics> {
     @Autowired
     private DatasetMetadataRepository datasetMetadataRepository;
 
-    private final String database;
+    @Value("${" + JobParametersNames.T2D_INPUT_STUDY_GENERATOR + "}")
+    private String t2dStudyGenerator;
 
-    public T2dStatisticsWriter(String database) {
-        this.database = database;
-    }
+    @Value("${" + JobParametersNames.T2D_INPUT_STUDY_TYPE + "}")
+    private String t2dStudyType;
+
+    @Value("${" + JobParametersNames.T2D_INPUT_STUDY_VERSION + "}")
+    private int t2dStudyVersion;
+
+    @Value("${" + JobParametersNames.T2D_INPUT_STUDY_PHENOTYPE + ":#{null}}")
+    private String t2dStudyPhenotype;
+
+    @Value("${" + JobParametersNames.T2D_INPUT_STUDY_STATISTICS_IDS + ":#{new String[]{}}}")
+    private String[] idKeys;
 
     @Override
     public void write(List<? extends T2dStatistics> items) throws Exception {
-        datasetMetadataRepository.storeStatistics(database, items);
+        datasetMetadataRepository.storeStatistics(generateStudyTableName(), items,idKeys);
+    }
+
+    private String generateStudyTableName() {
+        String tableName = t2dStudyType + "_" + t2dStudyGenerator + "_mdv" + t2dStudyVersion;
+        if (t2dStudyPhenotype == null) {
+            return tableName.toUpperCase();
+        } else {
+            return (tableName + "__" + t2dStudyPhenotype).toUpperCase();
+        }
     }
 
 }

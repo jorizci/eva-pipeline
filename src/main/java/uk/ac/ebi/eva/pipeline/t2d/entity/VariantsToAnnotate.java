@@ -29,7 +29,7 @@ import javax.persistence.Table;
 public class VariantsToAnnotate implements IVariant {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", length = 191)
     public String id;
 
     @Column(nullable = false)

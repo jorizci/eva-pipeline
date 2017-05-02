@@ -46,16 +46,17 @@ public class DatasetMetadataRepositoryImpl implements T2dRepository {
     }
 
     @Override
-    public void storeStatistics(String tableName, T2dStatistics statistics) {
-        List<String> keys = new ArrayList<>(statistics.getStatistics().keySet());
+    public void storeStatistics(String tableName, T2dStatistics statistics, String[] idKeys) {
+        List<String> keys = new ArrayList<>(statistics.getStatisticsKeys(idKeys));
 
         String query = "REPLACE into " + tableName + " (U_VAR_ID, VAR_ID ";
         for (String key : keys) {
             query += ", " + key;
         }
-        query += ") values('" + calculeSha256(statistics.getVariantId()) + "', '" + statistics.getVariantId() + "'";
+        String variantId = statistics.getVariantId(idKeys);
+        query += ") values('" + calculeSha256(variantId) + "', '" + variantId + "'";
         for (String key : keys) {
-            query += ", '" + statistics.getStatistics().get(key) + "'";
+            query += ", '" + statistics.getStatistic(key) + "'";
         }
         query += ")";
         entityManager.createNativeQuery(query).executeUpdate();
@@ -79,16 +80,16 @@ public class DatasetMetadataRepositoryImpl implements T2dRepository {
     }
 
     @Override
-    public void storeStatistics(String tableName, List<? extends T2dStatistics> statistics) {
+    public void storeStatistics(String tableName, List<? extends T2dStatistics> statistics, String[] idKeys) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        List<String> keys = new ArrayList<>(statistics.get(0).getStatistics().keySet());
+        List<String> keys = new ArrayList<>(statistics.get(0).getStatisticsKeys(idKeys));
         appendQueryStart(stringBuilder, tableName, keys);
-        appendValues(stringBuilder, keys, statistics.get(0));
+        appendValues(stringBuilder, keys, statistics.get(0), idKeys);
 
         for (int i = 1; i < statistics.size(); i++) {
             T2dStatistics statistic = statistics.get(i);
-            List<String> currentObjectKeys = new ArrayList<>(statistic.getStatistics().keySet());
+            List<String> currentObjectKeys = new ArrayList<>(statistics.get(0).getStatisticsKeys(idKeys));
 
             //If keys have changed, execute current batch and create a new one, otherwise add more values.
             if (!keys.containsAll(currentObjectKeys)) {
@@ -102,7 +103,7 @@ public class DatasetMetadataRepositoryImpl implements T2dRepository {
                 stringBuilder.append(",");
             }
 
-            appendValues(stringBuilder, keys, statistic);
+            appendValues(stringBuilder, keys, statistic, idKeys);
         }
         appendQueryEnd(stringBuilder, keys);
         executeQuery(stringBuilder);
@@ -117,11 +118,13 @@ public class DatasetMetadataRepositoryImpl implements T2dRepository {
         }
     }
 
-    private void appendValues(StringBuilder stringBuilder, List<String> keys, T2dStatistics t2dStatistic) {
-        stringBuilder.append("('").append(calculeSha256(t2dStatistic.getVariantId())).append("', '")
-                .append(t2dStatistic.getVariantId()).append("'");
+    private void appendValues(StringBuilder stringBuilder, List<String> keys, T2dStatistics t2dStatistic,
+                              String[] idKeys) {
+        String variantId = t2dStatistic.getVariantId(idKeys);
+        stringBuilder.append("('").append(calculeSha256(variantId)).append("', '")
+                .append(variantId).append("'");
         for (String key : keys) {
-            stringBuilder.append(",'").append(t2dStatistic.getStatistics().get(key)).append("'");
+            stringBuilder.append(",'").append(t2dStatistic.getStatistic(key)).append("'");
         }
         stringBuilder.append(")");
     }

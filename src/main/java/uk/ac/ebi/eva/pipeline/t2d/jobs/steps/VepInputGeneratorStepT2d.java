@@ -60,7 +60,7 @@ public class VepInputGeneratorStepT2d {
         logger.debug("Building '" + GENERATE_VEP_INPUT_STEP + "' - t2d version");
         Boolean canRestart = jobOptions.getPipelineOptions().getBoolean(JobParametersNames.CONFIG_RESTARTABILITY_ALLOW);
 
-        return stepBuilderFactory.get(GENERATE_VEP_INPUT_STEP).<IVariant, IVariant>chunk(10)
+        return stepBuilderFactory.get(GENERATE_VEP_INPUT_STEP).<IVariant, IVariant>chunk(10000)
                 .reader(reader)
                 .writer(writer)
                 .allowStartIfComplete(canRestart)

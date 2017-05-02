@@ -49,7 +49,7 @@ public class T2dLoadStatistics {
 
     @Autowired
     @Qualifier(T2D_MULTI_STATISTIC_FILES_READER)
-    private MultiResourceItemReader<T2dStatistics> multipleStatisticsWriter;
+    private MultiResourceItemReader<T2dStatistics> multipleStatisticsReader;
 
     @Autowired
     @Qualifier(T2D_STATISTICS_WRITER)
@@ -60,8 +60,8 @@ public class T2dLoadStatistics {
         logger.debug("Building '" + T2D_LOAD_STATISTICS_STEP + "'");
         Boolean canRestart = jobOptions.getPipelineOptions().getBoolean(JobParametersNames.CONFIG_RESTARTABILITY_ALLOW);
 
-        return stepBuilderFactory.get(T2D_LOAD_STATISTICS_STEP).<T2dStatistics, T2dStatistics>chunk(50000)
-                .reader(multipleStatisticsWriter)
+        return stepBuilderFactory.get(T2D_LOAD_STATISTICS_STEP).<T2dStatistics, T2dStatistics>chunk(5000)
+                .reader(multipleStatisticsReader)
                 .writer(t2dStatisticsWriter)
                 .allowStartIfComplete(canRestart)
                 .build();

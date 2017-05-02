@@ -33,7 +33,7 @@ public class T2dFileUtils {
 
     public static String[] getStudyProperties(String ... t2dStatisticsFiles) {
         return Arrays.stream(t2dStatisticsFiles).map(T2dFileUtils::getHeaderParameters)
-                .flatMap(Arrays::stream).filter(property -> !"VAR_ID".equals(property)).toArray(String[]::new);
+                .flatMap(Arrays::stream).toArray(String[]::new);
     }
 
 }

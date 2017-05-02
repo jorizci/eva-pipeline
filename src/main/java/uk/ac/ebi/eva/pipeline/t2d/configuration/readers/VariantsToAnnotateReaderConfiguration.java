@@ -46,7 +46,7 @@ public class VariantsToAnnotateReaderConfiguration {
     @StepScope
     public VariantsToAnnotateReader variantsToAnnotateReader() {
         logger.debug("Building '" + T2D_VARIANTS_TO_ANNOTATE_READER + "'");
-        VariantsToAnnotateReader reader = new VariantsToAnnotateReader();
+        VariantsToAnnotateReader reader = new VariantsToAnnotateReader(10000);
         reader.setRepository(variantsToannotateRepository);
         return reader;
     }

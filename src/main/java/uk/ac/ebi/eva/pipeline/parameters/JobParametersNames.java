@@ -145,4 +145,5 @@ public class JobParametersNames {
     public static final String T2D_INPUT_STUDY_VERSION = "t2d.input.study.version";
     public static final String T2D_INPUT_STUDY_PHENOTYPE = "t2d.input.study.phenotype";
     public static final String T2D_INPUT_STUDY_STATISTICS = "t2d.input.study.statistics";
+    public static final String T2D_INPUT_STUDY_STATISTICS_IDS = "t2d.input.study.statistics.ids";
 }

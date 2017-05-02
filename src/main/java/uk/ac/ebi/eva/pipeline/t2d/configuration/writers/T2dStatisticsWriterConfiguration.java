@@ -26,31 +26,11 @@ public class T2dStatisticsWriterConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(T2dStatisticsWriterConfiguration.class);
 
-    @Value("${" + JobParametersNames.T2D_INPUT_STUDY_GENERATOR + "}")
-    private String t2dStudyGenerator;
-
-    @Value("${" + JobParametersNames.T2D_INPUT_STUDY_TYPE + "}")
-    private String t2dStudyType;
-
-    @Value("${" + JobParametersNames.T2D_INPUT_STUDY_VERSION + "}")
-    private int t2dStudyVersion;
-
-    @Value("${" + JobParametersNames.T2D_INPUT_STUDY_PHENOTYPE + ":#{null}}")
-    private String t2dStudyPhenotype;
-
     @Bean(T2D_STATISTICS_WRITER)
     @StepScope
     public ItemWriter<? super T2dStatistics> t2dStatisticsWriter() {
         logger.debug("Building '" + T2D_STATISTICS_WRITER + "'");
-        return new T2dStatisticsWriter(generateStudyTableName());
+        return new T2dStatisticsWriter();
     }
 
-    private String generateStudyTableName() {
-        String tableName = t2dStudyType + "_" + t2dStudyGenerator + "_mdv" + t2dStudyVersion;
-        if (t2dStudyPhenotype == null) {
-            return tableName.toUpperCase();
-        } else {
-            return (tableName + "__" + t2dStudyPhenotype).toUpperCase();
-        }
-    }
 }

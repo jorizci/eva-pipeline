@@ -29,6 +29,7 @@ import uk.ac.ebi.eva.pipeline.t2d.entity.DatasetPhenotypeToTable;
 import uk.ac.ebi.eva.pipeline.t2d.entity.Phenotype;
 import uk.ac.ebi.eva.pipeline.t2d.entity.Property;
 import uk.ac.ebi.eva.pipeline.t2d.entity.PropertyToDataset;
+import uk.ac.ebi.eva.pipeline.t2d.entity.PropertyToDatasetAndPhenotype;
 import uk.ac.ebi.eva.pipeline.t2d.exceptions.DatasetAlreadyExists;
 import uk.ac.ebi.eva.pipeline.t2d.repository.DatasetMetadataRepository;
 import uk.ac.ebi.eva.pipeline.t2d.repository.DatasetPhenotypeToTableRepository;
@@ -37,6 +38,10 @@ import uk.ac.ebi.eva.pipeline.t2d.repository.PropertyRepository;
 import uk.ac.ebi.eva.pipeline.t2d.repository.PropertyToDatasetAndPhenotypeRepository;
 import uk.ac.ebi.eva.pipeline.t2d.repository.PropertyToDatasetRepository;
 import uk.ac.ebi.eva.pipeline.t2d.utils.T2dFileUtils;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PrepareDatabaseT2dStep implements Tasklet {
 
@@ -56,6 +61,9 @@ public class PrepareDatabaseT2dStep implements Tasklet {
 
     @Value("${" + JobParametersNames.T2D_INPUT_STUDY_STATISTICS + ":#{new String[]{}}}")
     private String[] t2dStatisticsFiles;
+
+    @Value("${" + JobParametersNames.T2D_INPUT_STUDY_STATISTICS_IDS + ":#{new String[]{}}}")
+    private String[] idKeys;
 
     @Autowired
     private DatasetMetadataRepository datasetMetadataRepository;
@@ -86,13 +94,23 @@ public class PrepareDatabaseT2dStep implements Tasklet {
     private void preparePropertiesFromStatisticFiles(DatasetMetadata datasetMetadata, String... t2dStatisticsFiles) {
         if (t2dStudyPhenotype == null) {
             for (String file : t2dStatisticsFiles) {
-                preparePropertiesDataset(datasetMetadata, T2dFileUtils.getStudyProperties(file));
+                preparePropertiesDataset(datasetMetadata, filterStatisticIds(T2dFileUtils.getStudyProperties(file)));
             }
         } else {
             for (String file : t2dStatisticsFiles) {
-                preparePropertiesDatasetPhenotype(datasetMetadata, T2dFileUtils.getStudyProperties(file));
+                preparePropertiesDatasetPhenotype(datasetMetadata, filterStatisticIds(
+                        T2dFileUtils.getStudyProperties(file)));
             }
         }
+    }
+
+    private String[] filterStatisticIds(String[] studyProperties) {
+        Set<String> properties = new HashSet<>();
+        Collections.addAll(properties, studyProperties);
+        for(String idKey: idKeys){
+            properties.remove(idKey);
+        }
+        return properties.toArray(new String[properties.size()]);
     }
 
     private void preparePropertiesDataset(DatasetMetadata datasetMetadata, String... properties) {
@@ -105,7 +123,8 @@ public class PrepareDatabaseT2dStep implements Tasklet {
     private void preparePropertiesDatasetPhenotype(DatasetMetadata datasetMetadata, String... properties) {
         for (String propertyId : properties) {
             prepareProperty(propertyId);
-            propertyToDatasetRepository.save(new PropertyToDataset(datasetMetadata, propertyId));
+            propertyToDatasetAndPhenotypeRepository.save(new PropertyToDatasetAndPhenotype(datasetMetadata,
+                    propertyId, t2dStudyPhenotype));
         }
     }
 
@@ -123,7 +142,8 @@ public class PrepareDatabaseT2dStep implements Tasklet {
                     t2dStudyPhenotype);
             tableName = datasetPhenotypeToTable.getTableName();
         }
-        datasetMetadataRepository.createTable(tableName, T2dFileUtils.getStudyProperties(t2dStatisticsFiles));
+        datasetMetadataRepository.createTable(tableName, filterStatisticIds(
+                T2dFileUtils.getStudyProperties(t2dStatisticsFiles)));
     }
 
     private DatasetPhenotypeToTable generateDatasetPhenotype(DatasetMetadata datasetMetadata, String phenotypeId) {

@@ -62,7 +62,7 @@ public class T2dLoadVcf {
         logger.debug("Building '" + T2D_LOAD_VCF_STEP + "'");
         Boolean canRestart = jobOptions.getPipelineOptions().getBoolean(JobParametersNames.CONFIG_RESTARTABILITY_ALLOW);
 
-        return stepBuilderFactory.get(T2D_LOAD_VCF_STEP).<Variant, Variant>chunk(10)
+        return stepBuilderFactory.get(T2D_LOAD_VCF_STEP).<Variant, Variant>chunk(1000)
                 .reader(t2dVcfReader)
                 .writer(compositeItemWriter)
                 .allowStartIfComplete(canRestart)

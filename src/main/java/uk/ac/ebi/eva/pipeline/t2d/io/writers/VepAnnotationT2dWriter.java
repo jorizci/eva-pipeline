@@ -42,19 +42,22 @@ public class VepAnnotationT2dWriter implements ItemWriter<VariantAnnotation> {
     @Override
     public void write(List<? extends VariantAnnotation> annotations) throws Exception {
         List<VariantInfo> variantInfos = new ArrayList<>();
+        List<String> variantIds = new ArrayList<>();
         for (VariantAnnotation annotation : annotations) {
             logger.info("Annotation: "+convertToVariantInfo(annotation).getVariantId()+"  "
                     +annotation.getChromosome()+" "+annotation.getStart()+" "+annotation.getEnd());
             variantInfos.add(convertToVariantInfo(annotation));
         }
         variantInfoRepository.save(variantInfos);
-        for (VariantInfo variantInfo : variantInfos) {
-            try {
-                variantsToannotateRepository.delete(variantInfo.getVariantId());
-            }catch (Exception e){
-                logger.info("Variant not in annotate list '"+variantInfo.getVariantId()+"'");
-            }
-        }
+
+
+//        for (VariantInfo variantInfo : variantInfos) {
+//            try {
+//                variantsToannotateRepository.delete(variantInfo.getVariantId());
+//            }catch (Exception e){
+//                logger.info("Variant not in annotate list '"+variantInfo.getVariantId()+"'");
+//            }
+//        }
     }
 
 }

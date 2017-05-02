@@ -29,10 +29,10 @@ public interface T2dRepository {
     void createTable(String tableName, String... statisticParameters);
 
     @Transactional(T2D_TRANSACTION_MANAGER)
-    void storeStatistics(String tableName, T2dStatistics statistics);
+    void storeStatistics(String tableName, T2dStatistics statistics, String[] idKeys);
 
     @Transactional(T2D_TRANSACTION_MANAGER)
-    void storeStatistics(String tableName, List<? extends T2dStatistics> statistics);
+    void storeStatistics(String tableName, List<? extends T2dStatistics> statistics, String[] idKeys);
 
     @Transactional(T2D_TRANSACTION_MANAGER)
     void storeVariantId(Variant variant, String tableName);

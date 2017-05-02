@@ -34,16 +34,12 @@ public class T2dCompositeVariantWriter {
     @Qualifier(T2D_VARIANTS_TO_ANNOTATE_WRITER)
     private VariantsToAnnotateWriter variantsToAnnotateWriter;
 
-    @Autowired
-    @Qualifier(T2D_VARIANT_STUDY_T2D_WRITER)
-    private VariantStudyT2dWriter variantStudyT2dWriter;
-
     @Bean(T2D_COMPOSITE_WRITER)
     @StepScope
     public CompositeItemWriter<Variant> compositeItemWriter() {
         logger.debug("Building '" + T2D_COMPOSITE_WRITER + "'");
         CompositeItemWriter<Variant> writer = new CompositeItemWriter<>();
-        writer.setDelegates(Arrays.asList(variantStudyT2dWriter, variantsToAnnotateWriter));
+        writer.setDelegates(Arrays.asList(variantsToAnnotateWriter));
         return writer;
     }
 
